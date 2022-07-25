@@ -21,7 +21,7 @@ class lottolyListAdapter(val dataList: List<String>)
         return ItemViewHolder(view)
     }
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.view.findViewById<TextView>(R.id.num_list).text = dataList[position]
+        holder.view.findViewById<TextView>(R.id.num).text = dataList[position]
     }
 
     override fun getItemCount(): Int {

@@ -10,7 +10,7 @@ class CheckNumberActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.check_number_activity)
-        val pref = getSharedPreferences("nums", Context.MODE_PRIVATE)
+        val pref = getSharedPreferences("lotto_nums", Context.MODE_PRIVATE)
         var lottoNums = pref.getString("lottonums", "")
         var numlist = if(lottoNums == ""){ //if문 마지막 구문이 대입이 됨 => lottoNums에 값이 없으면 빈 값 리턴
             mutableListOf<String>()
