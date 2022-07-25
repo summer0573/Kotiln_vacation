@@ -1,6 +1,7 @@
 package com.example.lotteryapp
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -33,6 +34,13 @@ class MainActivity : AppCompatActivity() {
             nums.text = currentNums // 생성된것 currenNums에 저장
         }
 
+        //4. 저장된 번호 확인
+        var checkNum = findViewById<Button>(R.id.check_num)
+        checkNum.setOnClickListener {
+            val intent = Intent(this, CheckNumberActivity::class.java)
+            startActivity(intent)
+        }
+
         /*
         * 처음에 프리퍼런스에서 "lottonums" 키를 통해서 문자열 값을 가져오는데 맨 처음에는 저장된게 없으므로 두 번째
         * 인자값인 빈 문자열을 가져옴
@@ -61,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             editor.putString("lottonums", list.joinToString(",")).apply()
 
             Log.d("mytag", list.toString())
+
         }
 
     }
@@ -86,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         return ""
 
         // Log.d("mytag", nums.text.toString())
+
     }
 
 }
