@@ -23,6 +23,10 @@ class CheckNumberActivity : AppCompatActivity() {
         //준비물 > 레이아웃 매니저
         listView.layoutManager = LinearLayoutManager(this)
 
+        listView.adapter = lottolyListAdapter(numlist)
+
+        listView.setHasFixedSize(true)
+
 
     }
 }
