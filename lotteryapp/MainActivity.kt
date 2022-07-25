@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         * 매번 저장할 때마다 joinToString을 통해서 문자열로 바꿔서 저장하므로 실제 저장되는 내용은
         * "1-2-3-4-5-6,6-5-4-3-2-1" <=이런 문자열이 저장이 됨
         */
+
         //저장
         var save_btn = findViewById<Button>(R.id.save_btn)
         save_btn.setOnClickListener {
