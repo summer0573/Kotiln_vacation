@@ -26,13 +26,16 @@ class CurrencyConverterFragment2 : Fragment() {
         return currencyExchangeMap[to]!! * USDAmount
     }
 
+    lateinit var fromCurrency: String
+    lateinit var toCurrency: String
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(
-            R.layout.currency_converter_fragment1,
+            R.layout.currency_converter_fragment2,
             container,
             false //무조건 false
         )
@@ -42,15 +45,33 @@ class CurrencyConverterFragment2 : Fragment() {
         val result = view.findViewById<TextView>(R.id.result)
         val exchangeType = view.findViewById<TextView>(R.id.exchange_type)
 
+        fromCurrency = arguments?.getString("from", "USD")!!
+        toCurrency = arguments?.getString("to", "USD")!!
 
-//        calculateBtn.serOnClickListener{
-//            result.text = calculateCurrency(
-//                amount.text.toString().toDouble(),
-//                fromCurrencySpinner.selectedItem.toString(),
-//                toCurrencySpinner.selectedItem.toString()
-//            ).toString()
+        exchangeType.text = "${fromCurrency} => ${toCurrency}"
 
+
+        calculateBtn.setOnClickListener {
+            result.text = calculateCurrency(
+                amount.text.toString().toDouble(),
+                fromCurrency,
+                toCurrency
+            ).toString()
+        }
 
         return view
+    }
+    companion object {
+        fun newInstance(from : String, to: String): CurrencyConverterFragment2 {
+            val fragment = CurrencyConverterFragment2()
+
+            //번들 객체를 만들고 필요한 데이터 저장
+            val args = Bundle()
+            args.putString("from", from)
+            args.putString("to", to)
+            fragment.arguments = args
+
+            return fragment
+        }
     }
 }

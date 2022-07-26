@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 
 class CurrencyConverterFragment1 : Fragment() {
@@ -41,7 +40,7 @@ class CurrencyConverterFragment1 : Fragment() {
         val amount = view.findViewById<EditText>(R.id.amount)
         val result = view.findViewById<TextView>(R.id.result)
         val fromCurrencySpinner = view.findViewById<Spinner>(R.id.from_currency)
-        val toCurrencySpinner = view.findViewById<Spinner>(R.id.to_Currency)
+        val toCurrencySpinner = view.findViewById<Spinner>(R.id.to_currency)
 
         val currencySelectionArrayAdapter = ArrayAdapter<String>(
             view.context,
@@ -64,7 +63,7 @@ class CurrencyConverterFragment1 : Fragment() {
         fromCurrencySpinner.onItemSelectedListener = itemSelectrdListener
         toCurrencySpinner.onItemSelectedListener = itemSelectrdListener
 
-        amount.addTextChangedListener{
+        amount.setOnClickListener{
             result.text = calculateCurrency(
                 amount.text.toString().toDouble(),
                 fromCurrencySpinner.selectedItem.toString(),

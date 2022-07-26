@@ -10,7 +10,9 @@ class MainActivity : AppCompatActivity() {
 
         val transaction = supportFragmentManager.beginTransaction()
         //transaction.add(R.id.fragment_container, CurrencyConverterFragment1())
-        transaction.add(R.id.fragment_container, CurrencyConverterFragment2())
+        transaction.add(R.id.fragment_container, CurrencyConverterFragment2.newInstance("USD", "KRW"))
+        transaction.commit()
+        transaction.add(R.id.fragment_container, CurrencyConverterFragment2.newInstance("KRW", "USD"))
         transaction.commit()
     }
 }
