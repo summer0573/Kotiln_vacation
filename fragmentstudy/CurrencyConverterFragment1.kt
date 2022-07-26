@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 
 class CurrencyConverterFragment1 : Fragment() {
@@ -13,7 +14,7 @@ class CurrencyConverterFragment1 : Fragment() {
         "USD" to 1.0,
         "EUR" to 0.9,
         "JPT" to 110.0,
-        "JPT" to 1150.0
+        "KRW" to 1150.0
     )
 
     fun calculateCurrency(amount : Double, from : String, to : String) : Double {
@@ -45,7 +46,7 @@ class CurrencyConverterFragment1 : Fragment() {
         val currencySelectionArrayAdapter = ArrayAdapter<String>(
             view.context,
             android.R.layout.simple_spinner_item,
-            listOf("USD","EUR", "JPT", "JPT")
+            listOf("USD","EUR", "JPT", "KRW")
         )
         currencySelectionArrayAdapter.setDropDownViewResource(
             android.R.layout.simple_spinner_dropdown_item
@@ -55,16 +56,22 @@ class CurrencyConverterFragment1 : Fragment() {
 
         val itemSelectrdListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                result.text = calculateCurrency(
-                    amount.text.toString().toDouble(),
-                    fromCurrencySpinner.selectedItem.toString(),
-                    toCurrencySpinner.selectedItem.toString()
-                ).toString()
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-            }
+        }
+        fromCurrencySpinner.onItemSelectedListener = itemSelectrdListener
+        toCurrencySpinner.onItemSelectedListener = itemSelectrdListener
+
+        amount.addTextChangedListener{
+            result.text = calculateCurrency(
+                amount.text.toString().toDouble(),
+                fromCurrencySpinner.selectedItem.toString(),
+                toCurrencySpinner.selectedItem.toString()
+            ).toString()
+
+
         }
 
         return view
