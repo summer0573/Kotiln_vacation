@@ -47,6 +47,25 @@ class CurrencyConverterFragment1 : Fragment() {
             android.R.layout.simple_spinner_item,
             listOf("USD","EUR", "JPT", "JPT")
         )
+        currencySelectionArrayAdapter.setDropDownViewResource(
+            android.R.layout.simple_spinner_dropdown_item
+        )
+        fromCurrencySpinner.adapter = currencySelectionArrayAdapter
+        toCurrencySpinner.adapter = currencySelectionArrayAdapter
+
+        val itemSelectrdListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                result.text = calculateCurrency(
+                    amount.text.toString().toDouble(),
+                    fromCurrencySpinner.selectedItem.toString(),
+                    toCurrencySpinner.selectedItem.toString()
+                ).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+        }
 
         return view
     }
