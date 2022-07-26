@@ -15,7 +15,8 @@ class CurrencyConverterFragment1 : Fragment() {
         val view = inflater.inflate(
             R.layout.currency_converter_fragment1,
             container,
-            false
+            false //무조건 false
         )
         return view
     }
+}
