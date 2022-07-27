@@ -27,7 +27,15 @@ class ComplexJSONDataDeserializer: StdDeserializer<ComplexJSONData>(
 
         val nestedNode = node?.get("nested")
         val innerDataValue =  nestedNode?.get("inner_data")?.asText()
-        
+        //data1 data2 가져오기
+        val innerNestedNode = nestedNode?.get("inner_nested")
+        val innerNestedData1 = innerNestedNode?.get("data1")?.asInt()
+        val innerNestedData2 = innerNestedNode?.get("data2")?.asInt()
+
+        val list = mutableListOf<Int>()
+        innerNestedNode?.get("List")?.elements()?.forEach {
+            list.add(it.asInt())
+        }
     }
 }
 
