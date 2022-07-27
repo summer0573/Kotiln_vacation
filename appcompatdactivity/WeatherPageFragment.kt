@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.w3c.dom.Text
 import wikibook.learnandroid.weatherdustchecker.APICall
 import java.net.URL
@@ -31,7 +33,17 @@ class MyDeserialize : StdDeserializer<OpenWeatherAPIJSONResponse>(
     ): OpenWeatherAPIJSONResponse {
         val node = p?.codec?.readTree<JsonNode>(p)
 
+
+//        val firstWeather = weather?.elements()?.next()
+//        val id = firstWeather?.get("id")?.asInt()
+//        val main = node?.get("main")
+//        val temp = main?.get("temp")?.asDouble()
         val weather = node?.get("weather")
+        val id = weather?.elements()?.next()?.get("id")?.asInt()
+        val mainNode = node?.get("main")
+        val temp = mainNode?.get("temp")?.asDouble()
+
+        return OpenWeatherAPIJSONResponse(temp!!, id!!)
     }
 }
 
@@ -81,6 +93,43 @@ class WeatherPageFragment : Fragment() {
         APICall(object : APICall.APICallback{
             override fun onComplete(result: String) {
                 Log.d("mytag", result)
+                var mapper = jacksonObjectMapper()
+                var data = mapper?.readValue<OpenWeatherAPIJSONResponse>(result)
+                temperatureText.text = data.temp.toString()
+                val id = data.id.toString()
+                if(id != null) {
+                    statusText.text = when {
+                        id.startsWith("2") -> {
+                            weatherImage.setImageResource(R.drawable.flash)
+                            "천둥, 번개"
+                        }
+                        id.startsWith("3") -> {
+                            weatherImage.setImageResource(R.drawable.rain)
+                            "이슬비"
+                        }
+                        id.startsWith("5") -> {
+                            weatherImage.setImageResource(R.drawable.rain)
+                            "비"
+                        }
+                        id.startsWith("6") -> {
+                            weatherImage.setImageResource(R.drawable.snow)
+                            "눈"
+                        }
+                        id.startsWith("7") -> {
+                            weatherImage.setImageResource(R.drawable.cloudy)
+                            "흐림"
+                        }
+                        id.equals("800") -> {
+                            weatherImage.setImageResource(R.drawable.sun)
+                            "화창"
+                        }
+                        id.startsWith("8") -> {
+                            weatherImage.setImageResource(R.drawable.cloud)
+                            "구름 낌"
+                        }
+                        else -> "알 수 없음"
+                    }
+                }
             }
         }).execute(URL(url))
     }
