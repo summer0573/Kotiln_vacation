@@ -9,9 +9,32 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.appcompatdactivity.R
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import org.w3c.dom.Text
 import wikibook.learnandroid.weatherdustchecker.APICall
 import java.net.URL
+
+@JsonDeserialize(using=MyDeserialize::class)
+
+data class OpenWeatherAPIJSONResponse(val temp : Double, val id : Int)
+
+class MyDeserialize : StdDeserializer<OpenWeatherAPIJSONResponse>(
+    OpenWeatherAPIJSONResponse :: class.java
+) {
+    override fun deserialize(
+        p: JsonParser?,
+        ctxt: DeserializationContext?
+    ): OpenWeatherAPIJSONResponse {
+        val node = p?.codec?.readTree<JsonNode>(p)
+
+        val weather = node?.get("weather")
+    }
+}
+
 
 class WeatherPageFragment : Fragment() {
     lateinit var weatherImage : ImageView
