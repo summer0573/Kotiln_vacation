@@ -2,6 +2,7 @@ package com.example.appcompatdactivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.weatherdustchecker.WeatherPageFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.fragment_container,
-            WeatherPageFragment.newInstance("화창", 10.0))
+            WeatherPageFragment.newInstance(37.58, 126.98))
         transaction.commit()
 
 
