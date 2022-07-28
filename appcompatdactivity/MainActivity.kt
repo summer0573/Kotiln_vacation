@@ -2,9 +2,15 @@ package com.example.appcompatdactivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.weatherdustchecker.MyDeserialize
 import com.example.weatherdustchecker.WeatherPageFragment
+import java.text.FieldPosition
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mPager : ViewPager
@@ -23,10 +29,43 @@ class MainActivity : AppCompatActivity() {
         val pagerApater = MypagerApater(supportFragmentManager)
         mPager.adapter = pagerApater
 
-//        val transaction = supportFragmentManager.beginTransaction()
-//        transaction.add(R.id.fragment_container,
-//            DustTestFragment.newInstance(37.58,126.98))
-//        transaction.commit()
+        mPager.addOnAdapterChangeListener(object : ViewPager.OnAdapterChangeListener {
+            override fun onAdapterChanged(
+                viewPager: ViewPager,
+                oldAdapter: PagerAdapter?,
+                newAdapter: PagerAdapter?
+            ) {
+
+            }
+
+            override fun onPageScollsStateChange(statr: Int) {}
+            override fun onPageSelected(position: Int) {
+                if (position == 0) {
+                    Toast.makeText(
+                        applicationContext,
+                        "날씨 페이지입니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else if (position == 1) {
+                    Toast.makeText(
+                        applicationContext,
+                        "미세먼지 페이지입니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        })
+    }
+
+    class MypagerApater(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
+        override fun getCount(): Int {
+            
+
+        }
+
+        override fun getItem(position: Int): Fragment {
+            TODO("Not yet implemented")
+        }
 
 
     }
