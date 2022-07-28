@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         mPager = findViewById(R.id.pager)
-        val pagerApater = MypagerApater(supportFragmentManager)
+        val pagerApater = MypagerApater(supportFragmentManager, lat, lon)
         mPager.adapter = pagerApater
 
         mPager.addOnAdapterChangeListener(object : ViewPager.OnAdapterChangeListener {
@@ -57,14 +57,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    class MypagerApater(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
-        override fun getCount(): Int {
-            
-
-        }
+    class MypagerApater(fm : FragmentManager, val lat : Double, val lon : Double) : FragmentStatePagerAdapter(fm){
+        override fun getCount() = 2
 
         override fun getItem(position: Int): Fragment {
-            TODO("Not yet implemented")
+            return when(position) {
+                0 -> WeatherPageFragment.newInstance(lat, lon)
+                1 -> DustTestFragment.newInstance(lat, lon)
+            }
         }
 
 
