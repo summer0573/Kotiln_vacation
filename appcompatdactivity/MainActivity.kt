@@ -10,6 +10,7 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.weatherdustchecker.MyDeserialize
 import com.example.weatherdustchecker.WeatherPageFragment
+import java.lang.Exception
 import java.text.FieldPosition
 
 class MainActivity : AppCompatActivity() {
@@ -29,31 +30,27 @@ class MainActivity : AppCompatActivity() {
         val pagerApater = MypagerApater(supportFragmentManager, lat, lon)
         mPager.adapter = pagerApater
 
-        mPager.addOnAdapterChangeListener(object : ViewPager.OnAdapterChangeListener {
-            override fun onAdapterChanged(
-                viewPager: ViewPager,
-                oldAdapter: PagerAdapter?,
-                newAdapter: PagerAdapter?
-            ) {
+        mPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {}
 
-            }
+            override fun onPageScrolled(
+                position: Int,              //0부터
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {}
 
-            override fun onPageScollsStateChange(statr: Int) {}
             override fun onPageSelected(position: Int) {
-                if (position == 0) {
-                    Toast.makeText(
-                        applicationContext,
-                        "날씨 페이지입니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else if (position == 1) {
-                    Toast.makeText(
-                        applicationContext,
-                        "미세먼지 페이지입니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                if(position == 0){
+                    Toast.makeText(applicationContext,
+                        "날씨 페이지 입니다",
+                        Toast.LENGTH_SHORT).show()
+                }else if(position == 1){
+                    Toast.makeText(applicationContext,
+                        "미세먼지 페이지 입니다.",
+                        Toast.LENGTH_SHORT).show()
                 }
             }
+
         })
     }
 
@@ -64,6 +61,7 @@ class MainActivity : AppCompatActivity() {
             return when(position) {
                 0 -> WeatherPageFragment.newInstance(lat, lon)
                 1 -> DustTestFragment.newInstance(lat, lon)
+                else -> throw Exception("페이지가 존재하지 않습니다.")
             }
         }
 
