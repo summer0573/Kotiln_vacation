@@ -24,7 +24,7 @@ import java.net.URL
 
 data class OpenDustAPI(val pm10 : Double, val pm25 : Double)
 
-class MyDust : StdDeserializer<OpenDustAPI>(
+class MyDust : StdDeserializer<OpenDustAPI>( //미세먼지 데이터 가져오기
     OpenDustAPI :: class.java
 ) {
     override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?)
@@ -84,9 +84,9 @@ class DustTestFragment : Fragment(){
                 choDustnum.text = data.pm25.toString()
 
                 val normalDustStatus = view.findViewById<TextView>(R.id.normal_dust_status)
-                var dust = "(미세먼지)"
+                var dust = "(미세먼지)" //미세먼지 구분
                 val pm10 = data.pm10.toInt()
-                if(0 <= pm10 && 50 >= pm10){
+                if(0 <= pm10 && 50 >= pm10){ //미세먼지 값 계산하기 및 사진 넣기
                     normalDustStatus.text = "좋음${dust}"
                     dustImage.setImageResource(R.drawable.good)
                 } else if (51 <= pm10 && 150 >= pm10) {
@@ -103,7 +103,7 @@ class DustTestFragment : Fragment(){
                 val choDustStatus = view.findViewById<TextView>(R.id.cho_dust_status)
                 dust = "(초미세먼지)"
                 val pm25 = data.pm25.toInt()
-                if(0 <= pm25 && 70 >= pm25){
+                if(0 <= pm25 && 70 >= pm25){//초 미세먼지 값 계산하기
                     choDustStatus.text = "좋음${dust}"
                 } else if (71 <= pm25 && 170 >= pm25) {
                     choDustStatus.text = "보통${dust}"
