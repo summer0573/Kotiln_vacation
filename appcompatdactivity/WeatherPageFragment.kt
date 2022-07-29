@@ -31,6 +31,11 @@ import java.net.URL
 
 data class OpenWeatherAPIJSONResponse(val temp : Double, val id : Int)
 
+data class OpenWeatherAPIJSONResponseGSON(
+    val main : Map<String, String>,
+    val weather : List<Map<String, String>>
+)
+
 class MyDeserialize : StdDeserializer<OpenWeatherAPIJSONResponse>(
     OpenWeatherAPIJSONResponse :: class.java
 ) {
@@ -105,6 +110,11 @@ class WeatherPageFragment : Fragment() {
             ) {
                 val data = response.body()
                 Log.d("mytag", data.toString())
+
+                val temp = data?.main?.get("temp")
+                val id = data?.weather?.get(0)?.get("id")
+                Log.d("mytag", temp.toString())
+                Log.d("mytag", id.toString())
 
             }
 
