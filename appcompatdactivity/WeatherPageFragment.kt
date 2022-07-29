@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.appcompatdactivity.OpenWeatherAPIJSONResponseGSON
 import com.example.appcompatdactivity.R
+import com.example.appcompatdactivity.WeatherAPIService
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonNode
@@ -16,7 +19,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import org.w3c.dom.Text
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import wikibook.learnandroid.weatherdustchecker.APICall
 import java.net.URL
 
@@ -73,12 +80,6 @@ class WeatherPageFragment : Fragment() {
         temperatureText = view.findViewById<TextView>(R.id.weather_temp_text)
         weatherImage = view.findViewById<ImageView>(R.id.weather_icon)
 
-//        weatherImage.setImageResource(arguments?.getInt("res_id")!!)
-//          Todo : ImagaViw 가져와서 sun 이미지 출력하기
-//        status.text = arguments?.getString("status")
-//        temperature.text = arguments?.getDouble("temperature").toString()
-
-
         return view
     }
 
@@ -90,6 +91,31 @@ class WeatherPageFragment : Fragment() {
 
         val url = "https://api.openweathermap.org/data/2.5/weather?units=metric&appid=${APP_ID}&lat=${lat}&lon=${lon}"
 
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://api.openweathermap.org")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val apiService = retrofit.create(WeatherAPIService::class.java)
+        val apiCallForData = apiService.getWeatherStatusInfo(APP_ID, lat!!, lon!!)
+        apiCallForData.enqueue(object : Callback<OpenWeatherAPIJSONResponseGSON>{
+            override fun onResponse(
+                call: Call<OpenWeatherAPIJSONResponseGSON>,
+                response: Response<OpenWeatherAPIJSONResponseGSON>
+            ) {
+                val data = response.body()
+                Log.d("mytag", data.toString())
+
+            }
+
+            override fun onFailure(call: Call<OpenWeatherAPIJSONResponseGSON>, t: Throwable) {
+                Toast.makeText(activity,
+                "에러 발생 : ${t.message}",
+                Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        /*
         APICall(object : APICall.APICallback{
             override fun onComplete(result: String) {
                 Log.d("mytag", result)
@@ -131,8 +157,9 @@ class WeatherPageFragment : Fragment() {
                     }
                 }
             }
-        }).execute(URL(url))
+        }).execute(URL(url))*/
     }
+
 
     companion object{
         fun newInstance(lat: Double, lon: Double)
