@@ -26,10 +26,12 @@ class MainActivity : AppCompatActivity() {
                 .baseUrl("https://api.github.com")
                 .addConverterFactory(
                     GsonConverterFactory.create(
+                        /*
                         GsonBuilder().registerTypeAdapter(
                             GithubUser::class.java,
                             GithubUserDeserializer()
                         ).create()
+                         */
                     )
                 ).build()
 
@@ -37,19 +39,20 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.input_btn).setOnClickListener{
             val id = userInput.text.toString()
-            val apiCallForData = apiService.getUser(id)
+            val apiCallForData = apiService.getUser(id, "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")
             apiCallForData.enqueue(object : Callback<GithubUser>{
                 override fun onResponse(call: Call<GithubUser>, response: Response<GithubUser>) {
                     val data = response.body()!!
                     Log.d("mytag", data.toString())
+
+                    content.text = "login : ${data.login}\n id : ${data.id}"
                 }
 
                 override fun onFailure(call: Call<GithubUser>, t: Throwable) {
-                    
+
                 }
 
             })
             }
         }
     }
-}
