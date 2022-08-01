@@ -3,6 +3,7 @@ package com.example.githubusersearch
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -23,7 +24,9 @@ data class GithubUser(
     val name : String?,
     val followers: Int,
     val following : Int,
-    val avatar_url : String
+    val avatar_url : String,
+    @SerializedName("avatar_url")
+    val avatarUrl : String
     )
 
 /*
