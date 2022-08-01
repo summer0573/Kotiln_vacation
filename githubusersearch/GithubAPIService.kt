@@ -17,7 +17,14 @@ interface GithubAPIService {
     ) : Call<GithubUser>
 }
 
-data class GithubUser(val id: Int, val login: String)
+data class GithubUser(
+    val id: Int,
+    val login: String,
+    val name : String?,
+    val followers: Int,
+    val following : Int,
+    val avatar_url : String
+    )
 
 /*
 class GithubUserDeserializer : JsonDeserializer<GithubUser> {
