@@ -34,8 +34,10 @@ class MainActivity : AppCompatActivity() {
             R.string.drawer_open,
             R.string.drawer_close
         ) {}
+        // isDrawerIndicatorEnabled 속성을 true로 설정해 액션바의 왼쪽 상단에 위치한 햄버거 아이콘을 통해 내비게이션 드로어를 표시하고 숨길 수 있도록 합니다.
         drawerToggle.isDrawerIndicatorEnabled = true
         drawerLayout.addDrawerListener(drawerToggle)
+        // setDisplayHomeAsUpEnabled 메서드를 호출해서 햄버거 아이콘을 표시하고 해당 아이콘을 클릭해 내비게이션 드로어를 열고 닫을 수 있도록 설
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 }
