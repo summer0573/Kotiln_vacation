@@ -25,6 +25,7 @@ abstract class QuizDatabase : RoomDatabase() {
     companion object {
         private var INSTANCE: QuizDatabase? = null
 
+        //싱글틴 패턴
         fun getInstance(context: Context): QuizDatabase {
             if(INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
@@ -34,6 +35,4 @@ abstract class QuizDatabase : RoomDatabase() {
             return INSTANCE!!
         }
     }
-}
-
 }

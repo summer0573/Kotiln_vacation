@@ -1,19 +1,34 @@
 package com.example.quizquiz
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.room.Entity
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.quizquiz.database.QuizDatabase
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
     lateinit var drawerToggle : ActionBarDrawerToggle
+    lateinit var db : QuizDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        db = QuizDatabase.getInstance(this)
+
+        val sp : SharedPreferences = getSharedPreferences(
+            "pref", Context.MODE_PRIVATE)
+        if(sp.getBoolean("initialized", true)) {
+            initQuizDataFromXMLFile()
+            val editor = sp.edit()
+            editor.putBoolean("initialized", false)
+            editor.commit()
+        }
 
         val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navView = findViewById<NavigationView>(R.id.drawer_nav_view)
