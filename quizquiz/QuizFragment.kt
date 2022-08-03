@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.quizquiz.database.Quiz
 import com.example.quizquiz.database.QuizDatabase
@@ -27,11 +28,19 @@ class QuizFragment : Fragment(),
         if(isCorrect) correctCount++
         currentQuizIdx++
 
-        childFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container,
-                QuizSolveFragment.newInstance(quizList[currentQuizIdx]))
-            .commit()
+        if(currentQuizIdx == quizList.size) {
+            childFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container,
+                    QuizResultFragment.newInstance(correctCount, quizList.size))
+                .commit()
+        } else {
+            childFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container,
+                    QuizSolveFragment.newInstance(quizList[currentQuizIdx]))
+                .commit()
+        }
     }
 
     override fun onQuizStart() {
