@@ -2,18 +2,24 @@ package com.example.quizquiz
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.room.Entity
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.quizquiz.database.Quiz
 import com.example.quizquiz.database.QuizDatabase
 import com.google.android.material.navigation.NavigationView
+import org.w3c.dom.Element
+import javax.xml.parsers.DocumentBuilder
+import javax.xml.parsers.DocumentBuilderFactory
 
 class MainActivity : AppCompatActivity() {
-    lateinit var drawerToggle : ActionBarDrawerToggle
-    lateinit var db : QuizDatabase
+    lateinit var drawerToggle: ActionBarDrawerToggle
+    lateinit var db: QuizDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,9 +27,16 @@ class MainActivity : AppCompatActivity() {
 
         db = QuizDatabase.getInstance(this)
 
-        val sp : SharedPreferences = getSharedPreferences(
-            "pref", Context.MODE_PRIVATE)
-        if(sp.getBoolean("initialized", true)) {
+        Thread(Runnable {
+            for(quiz in db.quizDAO().getAll()){
+                Log.d("mytag", quiz.toString())
+            }
+        }).start()
+
+        val sp: SharedPreferences = getSharedPreferences(
+            "pref", Context.MODE_PRIVATE
+        )
+        if (sp.getBoolean("initialized", true)) {
             initQuizDataFromXMLFile()
             val editor = sp.edit()
             editor.putBoolean("initialized", false)
@@ -39,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         navView.setNavigationItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.quiz_solve -> {
                     supportFragmentManager
                         .beginTransaction()
@@ -79,11 +92,60 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(drawerToggle.onOptionsItemSelected(item)) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
             return true
         }
 
         return super.onOptionsItemSelected(item)
     }
-}
 
+    fun initQuizDataFromXMLFile() {
+        AsyncTask.execute {
+            val stream = assets.open("quizzes.xml")
+
+            val docBuilder = DocumentBuilderFactory
+                .newInstance()
+                .newDocumentBuilder()
+            val doc = docBuilder.parse(stream)
+
+            val quizzesFromXMLDoc = doc.getElementsByTagName("quiz")
+            val quizList = mutableListOf<Quiz>()
+            for (idx in 0 until quizzesFromXMLDoc.length) {
+                // org.w3c.dom 패키지의 Element 클래스 import
+                val e = quizzesFromXMLDoc.item(idx) as Element
+
+                val type = e.getAttribute("type")
+                val question = e.getElementsByTagName("question").item(0).textContent
+                val answer = e.getElementsByTagName("question").item(0).textContent
+                val category = e.getElementsByTagName("category").item(0).textContent
+
+                when(type) {
+                    "ox" -> {
+                        quizList.add(
+                            Quiz(type=type,
+                                question=question,
+                                answer=answer,
+                                category = category)
+                        )
+                    }
+                    "multiple_choice" -> {
+                        var choices = e.getElementsByTagName("choice")
+                        var choiceList = mutableListOf<String>()
+                        for(idx in 0 until choices.length) {
+                            choiceList.add(choices.item(idx).textContent)
+                        }
+                        quizList.add(
+                            Quiz(type=type, question=question,
+                                answer=answer, category=category,
+                                guesses=choiceList))
+                    }
+                }
+
+            }
+            for(quiz in quizList) {
+                db.quizDAO().insert(quiz)
+            }
+
+        }
+    }
+}
