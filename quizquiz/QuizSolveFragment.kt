@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.quizquiz.database.Quiz
 
@@ -46,5 +48,36 @@ class QuizSolveFragment : Fragment() {
             R.layout.quiz_solve_fragment,
             container,
             false)
+
+        quiz = arguments?.getParcelable("quiz")!!
+        view.findViewById<TextView>(R.id.question).text = quiz.question
+        val choice = view.findViewById<ViewGroup>(R.id.choices)
+
+        val answerSelectListener = View.OnClickListener {
+            val guess = (it as Button).text.toString()
+
+            //guess와 퀴즈의 실제 답을 비교해서 listener의
+            //onAnswerSelected를 적절히 호출출
+            if(guess == quiz.answer) listener.onAnswerSelected(true)
+            else listener.onAnswerSelected(false)
+        }
+
+        when(quiz.type){
+            "ox" -> {
+                for(sign in listOf("o", "x")){
+                    var btn = Button(activity)
+                    btn.text = sign
+                    choice.addView(btn)
+                }
+            }
+            "multiple_choice" -> {
+                for(sign in quiz.guesses!!) {
+                    var btn = Button(activity)
+                    btn.text = sign
+                    choice.addView(btn)
+                }
+            }
+        }
+        return view
     }
 }
