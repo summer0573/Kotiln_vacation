@@ -1,6 +1,7 @@
 package com.example.quizquiz
 
 import android.content.Context
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.quizquiz.database.Quiz
 
@@ -19,6 +20,18 @@ class QuizSolveFragment : Fragment() {
             listener = parentFragment as QuizSolveListener
         } else {
             throw Exception("QuizStartListener 미구현")
+        }
+    }
+    //newIstance 클래스 메서드 (퀴즈 객체를 전달 받도록 구현)
+    companion object {
+        fun newInstance(quiz : Quiz) : QuizSolveFragment {
+            val fragment = QuizSolveFragment()
+
+            val args = Bundle()
+            args.putParcelable("quiz", quiz)
+            fragment.arguments = args
+
+            return fragment
         }
     }
 }
