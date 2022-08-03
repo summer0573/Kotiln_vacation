@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.quizquiz.database.Quiz
 import com.example.quizquiz.database.QuizDatabase
 
+//QuizSolveListener 구현하고, 맞췄으면 "정답", 틀렸으면 "오답" < 로그로 출력
 class QuizFragment : Fragment(),
         QuizStartFragment.QuizStartListener
 {
@@ -17,6 +18,11 @@ class QuizFragment : Fragment(),
     lateinit var quizList : List<Quiz>
     var currentQuizIdx = 0
     var correctCount = 0
+
+    override fun onAnswerSelected(isCorrect : Boolean) {
+        if(isCorrect) Log.d("mytag", "정답!")
+        else Log.d("mytag", "오답!")
+    }
 
     override fun onQuizStart() {
         Log.d("mytag", "시작하기")
