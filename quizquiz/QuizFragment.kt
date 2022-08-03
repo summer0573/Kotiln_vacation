@@ -12,16 +12,26 @@ import com.example.quizquiz.database.QuizDatabase
 
 //QuizSolveListener 구현하고, 맞췄으면 "정답", 틀렸으면 "오답" < 로그로 출력
 class QuizFragment : Fragment(),
-        QuizStartFragment.QuizStartListener
+    QuizStartFragment.QuizStartListener,
+    QuizSolveFragment.QuizSolveListener
 {
     lateinit var db : QuizDatabase
     lateinit var quizList : List<Quiz>
     var currentQuizIdx = 0
     var correctCount = 0
 
-    override fun onAnswerSelected(isCorrect : Boolean) {
-        if(isCorrect) Log.d("mytag", "정답!")
-        else Log.d("mytag", "오답!")
+    override fun onAnswerSelected(isCorrect: Boolean) {
+        // isCorrect가 true면 correctCount 1씩 증가
+        // 다음 퀴즈로 넘어가기 => currentQuizIdx 1씩 증가
+        // => QuizSolveFragment를 다시 만들어서 replace (단, 여기로 전달할 퀴즈는 다음 퀴즈)
+        if(isCorrect) correctCount++
+        currentQuizIdx++
+
+        childFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container,
+                QuizSolveFragment.newInstance(quizList[currentQuizIdx]))
+            .commit()
     }
 
     override fun onQuizStart() {
